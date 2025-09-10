@@ -1,0 +1,35 @@
+server:
+  port: 8080
+  ssl:
+    enabled: false
+  servlet:
+    context-path: /api
+  error:
+    include-stacktrace: never
+
+spring:
+  application:
+    name: reserva-workshop
+  profiles:
+    active: ${PROFILE:prod}
+  security:
+    user:
+      name: ${SEC_USER:admin}
+      password: ${SEC_PASS:admin}
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/reserva-workshop
+    username: postgres
+    password: 5988
+  jpa:
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    defer-datasource-initialization: false
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    show-sql: false
+  sql:
+    init:
+      mode: never
+      continue-on-error: false
