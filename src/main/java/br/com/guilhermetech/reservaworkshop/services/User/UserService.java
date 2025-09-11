@@ -23,6 +23,10 @@ public class UserService {
         return userRepository.findById(id).orElseThrow(() -> new RuntimeException("Id not exist" + id));
     }
 
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("email not exist"));
+    }
+
     public User insert(User user) {
         user.setPassword(this.passwordEncoder.encode("13245678"));
         user.setUserType(UserType.PART);

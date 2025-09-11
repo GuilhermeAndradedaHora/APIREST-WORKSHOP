@@ -30,6 +30,11 @@ public class UserResource {
         return ok(this.userService.findById(id));
     }
 
+    @GetMapping(value = "/{email}")
+    public ResponseEntity<?> findByEmail(@PathVariable(value = "email") String email) {
+        return ok(this.userService.findByEmail(email));
+    }
+
     @PostMapping
     public ResponseEntity<?> insert(@RequestBody UserRequest userRequest) {
         User item = this.userService.insert(userRequest.convertToEntity());

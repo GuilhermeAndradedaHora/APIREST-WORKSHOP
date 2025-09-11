@@ -1,7 +1,7 @@
 package br.com.guilhermetech.reservaworkshop.resources.registration;
 
 import br.com.guilhermetech.reservaworkshop.entities.Registration;
-import br.com.guilhermetech.reservaworkshop.services.RegistrationService;
+import br.com.guilhermetech.reservaworkshop.services.Registration.RegistrationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -47,6 +47,7 @@ public class Workshop {
     }
 
     public List<Registration> getRegistrations() {
+        //Verifica se a lista é nula e inicializa se for
         if (this.registrations == null) {
             this.registrations = new ArrayList<>();
         }

@@ -1,4 +1,4 @@
-package br.com.guilhermetech.reservaworkshop.services;
+package br.com.guilhermetech.reservaworkshop.services.Registration;
 
 import br.com.guilhermetech.reservaworkshop.entities.Registration;
 import br.com.guilhermetech.reservaworkshop.repositories.RegistrationRepository;
@@ -23,9 +23,11 @@ public class RegistrationService {
     public Registration insert(Registration registration, Long workshopId) {
         var workshop = this.workshopRepository.findById(workshopId).orElseThrow(() -> new RuntimeException("Workshop not found!"));
         var userId = registration.getUserId();
+        //Verifica se usuário já esta inscrito
         if (this.registrationRepository.existsByUserIdAndWorkshop_Id(userId, workshopId)) {
             throw new RuntimeException("User already eregistered!");
         }
+        //Verifica se Whorkshop já esta cheio
         if (workshop.getRegistrations().size() >= workshop.getMaxCapacity()) {
             throw new RuntimeException("Workshop is full!");
         }

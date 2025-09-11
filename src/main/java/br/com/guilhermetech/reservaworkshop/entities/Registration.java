@@ -22,11 +22,16 @@ public class Registration {
     @Column(name = "user_id", nullable = false)
     private Long userId;
 
+    //Muitos registros podem entrar em um mesmo workshop
+    //CascadeType.ALL diz que todas as operações em Registration serão propagadas para o workshop
+    //FetchType.EAGER carrega o workshop imediatamente quando busca Registration
     @ManyToOne(cascade = CascadeType.ALL,  fetch = FetchType.EAGER)
     @JoinColumn(name = "workshop_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_registration_workshop"))
+    // Evita loop infinito quando se tem relação bidirecional (W->R->W)
     @JsonBackReference(value = "registrations-workshop")
     private Workshop workshop;
 
+    //Não mapeia o campo para o DB
     @Transient
     private Long workshopId;
     @Transient
