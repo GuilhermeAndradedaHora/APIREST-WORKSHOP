@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface RegistrationRepository extends JpaRepository<Registration, Long> {
     List<Registration> findAllByUserId(@Param(value = "userId") Long userId);
+    boolean existsByUserIdAndWorkshop_Id(Long userId, Long workshopId);
 }

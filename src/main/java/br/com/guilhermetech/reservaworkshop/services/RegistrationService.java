@@ -22,6 +22,10 @@ public class RegistrationService {
     @Transactional
     public Registration insert(Registration registration, Long workshopId) {
         var workshop = this.workshopRepository.findById(workshopId).orElseThrow(() -> new RuntimeException("Workshop not found!"));
+        var userId = registration.getUserId();
+        if (this.registrationRepository.existsByUserIdAndWorkshop_Id(userId, workshopId)) {
+            throw new RuntimeException("User already eregistered!");
+        }
         if (workshop.getRegistrations().size() >= workshop.getMaxCapacity()) {
             throw new RuntimeException("Workshop is full!");
         }
