@@ -1,4 +1,4 @@
-package br.com.guilhermetech.reservaworkshop.resources.registration;
+package br.com.guilhermetech.reservaworkshop.resources.registration.dtos;
 
 import br.com.guilhermetech.reservaworkshop.entities.Registration;
 

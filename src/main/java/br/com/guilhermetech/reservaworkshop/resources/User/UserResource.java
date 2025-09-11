@@ -5,6 +5,7 @@ import br.com.guilhermetech.reservaworkshop.resources.User.dtos.UserRequest;
 import br.com.guilhermetech.reservaworkshop.services.User.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -20,6 +21,7 @@ public class UserResource {
     private final UserService userService;
 
     @GetMapping
+    @PreAuthorize(value = "validatorSecurity.canExecute('USER', 'ADMIN')")
     public ResponseEntity<List<User>>  findAll() {
         List<User> users = userService.findAll();
         return ok().body(users);
@@ -49,6 +51,7 @@ public class UserResource {
     }
 
     @DeleteMapping(value = "/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> delete(@RequestParam(value = "id") Long id) {
         this.userService.delete(id);
         return ResponseEntity.noContent().build();

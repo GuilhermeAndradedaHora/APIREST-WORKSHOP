@@ -1,4 +1,4 @@
-package br.com.guilhermetech.reservaworkshop.services.User;
+package br.com.guilhermetech.reservaworkshop.config.security;
 
 import br.com.guilhermetech.reservaworkshop.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -7,13 +7,11 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 
-@Service
 @RequiredArgsConstructor
-public class UserTypeService implements UserDetailsService {
+public class CustomUserDetailService implements UserDetailsService {
     private final UserRepository userRepository;
 
     @Override
@@ -23,7 +21,7 @@ public class UserTypeService implements UserDetailsService {
                 user.getEmail(),
                 user.getPassword(),
                 Collections.singletonList(
-                        new SimpleGrantedAuthority("TYPE_" + user.getUserType().name())
+                        new SimpleGrantedAuthority("ROLE_" + user.getUserType().name())
                 )
         );
     }

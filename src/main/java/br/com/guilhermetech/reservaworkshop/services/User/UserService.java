@@ -4,6 +4,8 @@ import br.com.guilhermetech.reservaworkshop.entities.User;
 import br.com.guilhermetech.reservaworkshop.entities.enums.UserType;
 import br.com.guilhermetech.reservaworkshop.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -35,6 +37,12 @@ public class UserService {
 
     public User update(Long id, User user) {
         User entity = this.findById(id);
+
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!authentication.getPrincipal().equals(entity.getEmail())) {
+            throw new RuntimeException("Unauthorized access!");
+        }
+
         entity.setName(user.getName());
         entity.setEmail(user.getEmail());
         return userRepository.save(entity);

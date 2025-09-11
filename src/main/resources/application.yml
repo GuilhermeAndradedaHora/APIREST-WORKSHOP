@@ -33,3 +33,7 @@ spring:
     init:
       mode: never
       continue-on-error: false
+
+jwt:
+  secret: ${JWT_SECRET:rh3eoirhoiweryh9034y58901yr09n13hr09nn091y309871y34r031ynb0yn4rb098wyr098740r9bn1y0mwe9ry091324ry091234}
+  expiration: 3600000

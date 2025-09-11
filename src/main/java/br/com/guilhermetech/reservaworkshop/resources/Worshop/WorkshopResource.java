@@ -1,9 +1,11 @@
 package br.com.guilhermetech.reservaworkshop.resources.Worshop;
 
 import br.com.guilhermetech.reservaworkshop.entities.Workshop;
+import br.com.guilhermetech.reservaworkshop.resources.Worshop.dtos.WorkshopRequest;
 import br.com.guilhermetech.reservaworkshop.services.Workshop.WorkshopService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -29,6 +31,7 @@ public class WorkshopResource {
     }
 
     @PostMapping
+    @PreAuthorize(value = "hasRole('ADMIN')")
     public ResponseEntity<?> insert(@RequestBody WorkshopRequest itemRequest, UriComponentsBuilder builder) {
         var item = this.service.insert(itemRequest.convertToEntity());
         var uri = builder.path("/workshop/{id}").buildAndExpand(item.getId()).toUri();

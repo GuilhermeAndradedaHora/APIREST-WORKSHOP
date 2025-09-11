@@ -1,8 +1,7 @@
-package br.com.guilhermetech.reservaworkshop.resources.Worshop;
+package br.com.guilhermetech.reservaworkshop.resources.Worshop.dtos;
 
 import br.com.guilhermetech.reservaworkshop.entities.Workshop;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 

@@ -35,4 +35,9 @@ public class RegistrationService {
         var workshopSaved = this.workshopRepository.save(workshop);
         return workshopSaved.getRegistrations().get(workshop.getRegistrations().size() - 1);
     }
+
+    public void delete(Long id) {
+        var entity = this.registrationRepository.findById(id).orElseThrow(() -> new RuntimeException("Register not exist!"));
+        this.registrationRepository.delete(entity);
+    }
 }
