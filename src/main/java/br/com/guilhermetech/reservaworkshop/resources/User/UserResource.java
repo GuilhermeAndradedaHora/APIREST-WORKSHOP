@@ -28,11 +28,13 @@ public class UserResource {
     }
 
     @GetMapping(value = "/{id}")
+    @PreAuthorize(value = "validatorSecurity.canExecute('USER', 'ADMIN')")
     public ResponseEntity<?> findById(@PathVariable(value = "id") Long id) {
         return ok(this.userService.findById(id));
     }
 
     @GetMapping(value = "/{email}")
+    @PreAuthorize(value = "validatorSecurity.canExecute('USER', 'ADMIN')")
     public ResponseEntity<?> findByEmail(@PathVariable(value = "email") String email) {
         return ok(this.userService.findByEmail(email));
     }

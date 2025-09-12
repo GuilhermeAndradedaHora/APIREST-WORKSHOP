@@ -2,8 +2,11 @@ package br.com.guilhermetech.reservaworkshop.services.Registration;
 
 import br.com.guilhermetech.reservaworkshop.entities.Registration;
 import br.com.guilhermetech.reservaworkshop.repositories.RegistrationRepository;
+import br.com.guilhermetech.reservaworkshop.repositories.UserRepository;
 import br.com.guilhermetech.reservaworkshop.repositories.WorkshopRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,6 +17,7 @@ import java.util.List;
 public class RegistrationService {
     private final RegistrationRepository registrationRepository;
     private final WorkshopRepository workshopRepository;
+    private final UserRepository userRepository;
 
     public List<Registration> findByUserId(Long userId){
         return this.registrationRepository.findAllByUserId(userId);
@@ -23,6 +27,14 @@ public class RegistrationService {
     public Registration insert(Registration registration, Long workshopId) {
         var workshop = this.workshopRepository.findById(workshopId).orElseThrow(() -> new RuntimeException("Workshop not found!"));
         var userId = registration.getUserId();
+
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        var loggedEmail = ((UserDetails) authentication.getPrincipal()).getUsername();
+        var user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found!"));
+        if (!authentication.getPrincipal().equals(user.getEmail())) {
+            throw new RuntimeException("Unauthorized access!");
+        }
+
         //Verifica se usuário já esta inscrito
         if (this.registrationRepository.existsByUserIdAndWorkshop_Id(userId, workshopId)) {
             throw new RuntimeException("User already eregistered!");
@@ -31,6 +43,7 @@ public class RegistrationService {
         if (workshop.getRegistrations().size() >= workshop.getMaxCapacity()) {
             throw new RuntimeException("Workshop is full!");
         }
+
         workshop.addRegistration(registration);
         var workshopSaved = this.workshopRepository.save(workshop);
         return workshopSaved.getRegistrations().get(workshop.getRegistrations().size() - 1);

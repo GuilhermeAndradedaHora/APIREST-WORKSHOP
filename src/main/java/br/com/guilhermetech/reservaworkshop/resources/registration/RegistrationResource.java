@@ -19,6 +19,7 @@ public class RegistrationResource {
 
 
     @GetMapping
+    @PreAuthorize(value = "validatorSecurity.canExecute('USER', 'ADMIN')")
     public ResponseEntity<List<Registration>> getItems(@RequestParam(value = "userId") Long userId) {
         var items = this.service.findByUserId(userId);
         return ResponseEntity.ok(items);

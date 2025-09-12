@@ -46,17 +46,20 @@ public class WebConfig {
         configuration.setMaxAge(3600L);
         var cors = new UrlBasedCorsConfigurationSource();
         cors.registerCorsConfiguration("/**", configuration);
+        //Permite requisições de origens diferentes
         return cors;
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity security) throws Exception {
+        //Desliga proteção CSRF
         security.csrf(AbstractHttpConfigurer::disable)
                 .cors((cors) -> cors.configurationSource(this.corsConfigurationSource()))
+                //Autenticação 100% via token
                 .sessionManagement((session) -> session.sessionCreationPolicy(STATELESS))
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/public/**").permitAll()
-                        .requestMatchers(GET, "/workshop/**").permitAll()
+                        .requestMatchers("/auth/**").permitAll()
+                        //.requestMatchers(GET, "/workshop/**").permitAll()
                         .anyRequest().authenticated());
         security.addFilterBefore(this.jwtFilter(), UsernamePasswordAuthenticationFilter.class);
         return security.build();
