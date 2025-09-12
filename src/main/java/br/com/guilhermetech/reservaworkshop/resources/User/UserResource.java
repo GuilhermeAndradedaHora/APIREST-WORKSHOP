@@ -1,11 +1,14 @@
 package br.com.guilhermetech.reservaworkshop.resources.User;
 
 import br.com.guilhermetech.reservaworkshop.entities.User;
+import br.com.guilhermetech.reservaworkshop.repositories.UserRepository;
+import br.com.guilhermetech.reservaworkshop.resources.User.dtos.ChangePasswordRequest;
 import br.com.guilhermetech.reservaworkshop.resources.User.dtos.UserRequest;
 import br.com.guilhermetech.reservaworkshop.services.User.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -19,22 +22,21 @@ import static org.springframework.http.ResponseEntity.ok;
 @RequiredArgsConstructor
 public class UserResource {
     private final UserService userService;
+    private final UserRepository userRepository;
 
     @GetMapping
-    @PreAuthorize(value = "validatorSecurity.canExecute('USER', 'ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<User>>  findAll() {
         List<User> users = userService.findAll();
         return ok().body(users);
     }
 
     @GetMapping(value = "/{id}")
-    @PreAuthorize(value = "validatorSecurity.canExecute('USER', 'ADMIN')")
     public ResponseEntity<?> findById(@PathVariable(value = "id") Long id) {
         return ok(this.userService.findById(id));
     }
 
     @GetMapping(value = "/{email}")
-    @PreAuthorize(value = "validatorSecurity.canExecute('USER', 'ADMIN')")
     public ResponseEntity<?> findByEmail(@PathVariable(value = "email") String email) {
         return ok(this.userService.findByEmail(email));
     }
@@ -56,6 +58,12 @@ public class UserResource {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> delete(@RequestParam(value = "id") Long id) {
         this.userService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping(value = "/{id}/change-password")
+    public ResponseEntity<?> ChangePassword(@PathVariable Long id, @RequestBody ChangePasswordRequest changePasswordRequest) {
+        this.userService.changePassword(id, changePasswordRequest.newPassword());
         return ResponseEntity.noContent().build();
     }
 

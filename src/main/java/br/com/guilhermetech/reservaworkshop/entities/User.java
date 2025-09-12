@@ -31,6 +31,8 @@ public class User implements UserDetails {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private UserType userType;
+    @Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
+    private Boolean firstLogin = true;
 
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if (userType == UserType.ADMIN) {
