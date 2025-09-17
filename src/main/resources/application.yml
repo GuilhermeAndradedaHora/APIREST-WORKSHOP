@@ -33,6 +33,17 @@ spring:
     init:
       mode: never
       continue-on-error: false
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: horagui.andrade@gmail.com
+    password: smek shmt ndei nsvk
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 
 jwt:
   secret: ${JWT_SECRET:rh3eoirhoiweryh9034y58901yr09n13hr09nn091y309871y34r031ynb0yn4rb098wyr098740r9bn1y0mwe9ry091324ry091234}

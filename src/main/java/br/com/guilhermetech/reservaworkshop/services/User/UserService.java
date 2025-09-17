@@ -3,12 +3,14 @@ package br.com.guilhermetech.reservaworkshop.services.User;
 import br.com.guilhermetech.reservaworkshop.entities.User;
 import br.com.guilhermetech.reservaworkshop.entities.enums.UserType;
 import br.com.guilhermetech.reservaworkshop.repositories.UserRepository;
+import br.com.guilhermetech.reservaworkshop.services.EmailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -17,6 +19,7 @@ import java.util.List;
 public class UserService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final EmailService emailService;
 
     public List<User> findAll() {
         return userRepository.findAll();
@@ -30,10 +33,15 @@ public class UserService {
         return userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("email not exist"));
     }
 
+    @Transactional
     public User insert(User user) {
         user.setPassword(this.passwordEncoder.encode("13245678"));
         user.setUserType(UserType.PART);
-        return userRepository.save(user);
+        var savedUser = userRepository.save(user);
+        emailService.sendEmail(user.getEmail(),
+                "New user registered",
+                "You are receiving a registration email");
+        return savedUser;
     }
 
     public User update(Long id, User user) {

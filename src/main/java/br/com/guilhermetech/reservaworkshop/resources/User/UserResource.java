@@ -32,11 +32,13 @@ public class UserResource {
     }
 
     @GetMapping(value = "/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> findById(@PathVariable(value = "id") Long id) {
         return ok(this.userService.findById(id));
     }
 
     @GetMapping(value = "/{email}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> findByEmail(@PathVariable(value = "email") String email) {
         return ok(this.userService.findByEmail(email));
     }

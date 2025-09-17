@@ -25,6 +25,7 @@ import java.util.List;
 
 import static java.util.Collections.singletonList;
 import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @Configuration
@@ -59,6 +60,7 @@ public class WebConfig {
                 .sessionManagement((session) -> session.sessionCreationPolicy(STATELESS))
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers(POST, "/users").permitAll()
                         //.requestMatchers(GET, "/workshop/**").permitAll()
                         .anyRequest().authenticated());
         security.addFilterBefore(this.jwtFilter(), UsernamePasswordAuthenticationFilter.class);
